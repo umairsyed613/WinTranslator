@@ -1,0 +1,23 @@
+name: Build and Publish
+
+on:
+  push: {branches: master}
+  pull_request: {branches: master}
+
+jobs:
+
+  build:
+    runs-on: windows-latest
+
+    env:
+      Solution_Name: Src/WinTranslator.sln
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Nuget.exe
+      uses: warrenbuckley/Setup-Nuget@v1
+    - name: Restore packages
+      run: nuget restore Src/WinTranslator.sln
+    - name: Setup MSBuild.exe
+      uses: warrenbuckley/Setup-MSBuild@v1
+    - name: Build with MSBuild
+      run: msbuild Src/WinTranslator.sln -p:Configuration=Release
